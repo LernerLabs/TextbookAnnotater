@@ -13,40 +13,127 @@ wp_enqueue_script('bootstrap_js');
 wp_register_style( 'admin_page_css', TEXTBOOK_ANNOTATER__PLUGIN_URL . '/assets/css/admin_page.css' );
 wp_enqueue_style('admin_page_css');
 
-// add bootstrap js
+// add js
 wp_register_script( 'admin_page_js',TEXTBOOK_ANNOTATER__PLUGIN_URL . "assets/js/admin_page.js");
 wp_enqueue_script('admin_page_js');
 
 
+// get all textbooks from database
+function get_all_textbooks(){
+
+	global $wpdb;    
+	$textbookTable = $wpdb->prefix.'textbooks';
+	$result = $wpdb->get_results ( "SELECT * FROM $textbookTable");
+	return $result;
+}
+
+// add new textbook into database
+function add_new_textbook($name, $author){
+	
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'textbooks';
+	$wpdb->insert( 
+		$table_name,
+		array( 
+			'time' => current_time( 'mysql' ), 
+			'name' => $name, 
+			'author' => $author, 
+		)
+	);
+}
+
+// delete textbook from database
+function delete_textbook($id){
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'textbooks';
+	$wpdb->delete( $table_name, array( 'id' => $id ) );
+}
+
+
 // admin page view
 function show_admin_page(){
-    ?>
-    <div class="container">
-        <button class="tablink" onclick="openPage('Home', this)">Home</button>
-        <button class="tablink" onclick="openPage('Textbooks', this)" >Textbooks</button>
-        <button class="tablink" onclick="openPage('Responses', this)">Responses</button>
-        <button class="tablink" onclick="openPage('About', this)">About</button>
+	?>
+	<div class="container">
+		<div class="col-sm-6">
+			<!-- show alert for creating textbook -->
+			<?php 
+			if(isset($_POST['submit']) && $_POST['submit'] == "add_new_textbook") {
+				add_new_textbook($_POST["name"], $_POST["author"]);
+				echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
+				echo "textbook " . $_POST['name'] . " created!";
+				echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+				echo "</div>";
+			}
+			?>
 
-        <div id="Home" class="tabcontent">
-          <h3>Home</h3>
-          <p>Plugin main settings!</p>
-        </div>
+			<!-- show alert for deleting textbook -->
+			<?php
+				if (isset($_POST['delete_textbook']) ){
+					delete_textbook($_POST["id"]);
+					echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
+					echo "textbook with id " . $_POST['id'] . " deleted!";
+					echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+					echo "</div>";
+				}
+			?>
 
-        <div id="Textbooks" class="tabcontent">
-          <h3>Textbooks</h3>
-          <p>Add and manage textbooks!</p> 
-        </div>
 
-        <div id="Responses" class="tabcontent">
-          <h3>Responses</h3>
-          <p>Manage student responses here!</p>
-        </div>
+		</div>
 
-        <div id="About" class="tabcontent">
-          <h3>About</h3>
-          <p>Who we are and what we do.</p>
-        </div>
-    </div>
+		<!-- tabview button -->
+		<button class="tablink" onclick="openPage('Home', this)">Home</button>
+		<button class="tablink" onclick="openPage('Textbooks', this)" >Textbooks</button>
+		<button class="tablink" onclick="openPage('Responses', this)">Responses</button>
+		<button class="tablink" onclick="openPage('About', this)">About</button>
+
+		<!-- tabview content -->
+		<div id="Home" class="tabcontent">
+			<h3>Home</h3>
+			<p>Plugin main settings!</p>
+		</div>
+
+		<div id="Textbooks" class="tabcontent">
+			<h3>Textbooks</h3>
+			<p>Add and manage textbooks!</p> 
+
+			<hr>
+			<h4>Current Textbooks</h4>
+			<?php 
+				$all_textbooks = get_all_textbooks();
+				foreach($all_textbooks as $texbook){
+					echo  "<p> $texbook->name <strong>by</strong> $texbook->author </p>";
+					echo "<form method='post'>";
+					echo "<input type='hidden' name='id' value='$texbook->id'>";
+					echo "<button type='submit' name='delete_textbook' class='btn btn-danger'> Delete $texbook->name </button><br>";
+					echo "</form>";
+				}
+			?>
+
+			<hr>
+			<h4>Add Textbook</h4>
+			<div class="col-sm-6">
+				<form method="post">
+					<label for="textbook_name" class="form-label">Textbook Name</label>
+					<input type="text" class="form-control" id="textbook_name" name="name" required>
+
+					<label for="textbook_author" class="form-label">Textbook Author</label>
+					<input type="text" class="form-control" id="textbook_author" name="author" required>
+
+					<?php submit_button($name = 'add_new_textbook')?>
+				</form>
+			</div>
+		</div>
+
+		<div id="Responses" class="tabcontent">
+			<h3>Responses</h3>
+			<p>Manage student responses here!</p>
+		</div>
+
+		<div id="About" class="tabcontent">
+			<h3>About</h3>
+			<p>Who we are and what we do.</p>
+		</div>
+	</div>
 <?php
 }
 ?>
