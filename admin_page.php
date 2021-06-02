@@ -78,7 +78,7 @@ function show_admin_page(){
 		<div class="col-sm-6">
 			<!-- show alert for creating textbook -->
 			<?php 
-			if(isset($_POST['submit']) && $_POST['submit'] == "add_new_textbook") {
+			if(isset($_POST['submit']) && $_POST['submit'] == "Add new textbook") {
 				add_new_textbook($_POST["name"], $_POST["author"]);
 				echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
 				echo "textbook " . $_POST['name'] . " created!";
@@ -157,7 +157,7 @@ function show_admin_page(){
 					<label for="textbook_author" class="form-label">Textbook Author</label>
 					<input type="text" class="form-control" id="textbook_author" name="author" required>
 
-					<?php submit_button($name = 'add_new_textbook')?>
+					<?php submit_button($name = 'Add new textbook')?>
 				</form>
 			</div>
 		</div>
