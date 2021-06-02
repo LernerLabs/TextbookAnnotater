@@ -17,6 +17,20 @@ wp_enqueue_style('admin_page_css');
 wp_register_script( 'admin_page_js',TEXTBOOK_ANNOTATER__PLUGIN_URL . "assets/js/admin_page.js");
 wp_enqueue_script('admin_page_js');
 
+// add student response form page for textbook
+function add_student_response_page($textbook_id, $texbook_name){
+	
+	$post_details = array(
+		'post_title'    => "Textbook " . $texbook_name,
+		'post_content'  => 'Content of your page for textbook ' . $texbook_name . ' with id: ' . $textbook_id,
+		'post_status'   => 'publish',
+		'post_author'   => 1,
+		'post_type' => 'page'
+	);
+	wp_insert_post( $post_details );
+
+}
+
 
 // get all textbooks from database
 function get_all_textbooks(){
@@ -77,6 +91,17 @@ function show_admin_page(){
 				}
 			?>
 
+			<!-- show alert for adding page -->
+			<?php
+				if (isset($_POST['add_textbook_page']) ){
+					add_student_response_page($_POST["id"], $_POST["textbook_name"]);
+					echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
+					echo "page added!";
+					echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+					echo "</div>";
+				}
+			?>
+
 
 		</div>
 
@@ -104,7 +129,9 @@ function show_admin_page(){
 					echo  "<p> $texbook->name <strong>by</strong> $texbook->author </p>";
 					echo "<form method='post'>";
 					echo "<input type='hidden' name='id' value='$texbook->id'>";
+					echo "<input type='hidden' name='textbook_name' value='$texbook->name'>";
 					echo "<button type='submit' name='delete_textbook' class='btn btn-danger'> Delete $texbook->name </button><br>";
+					echo "<button type='submit' name='add_textbook_page' class='btn btn-primary'> Add page for $texbook->name </button><br>";
 					echo "</form>";
 				}
 			?>
