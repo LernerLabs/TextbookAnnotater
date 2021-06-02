@@ -40,6 +40,7 @@ function Textbook_create_table(){
       time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
       name tinytext NOT NULL,
       author tinytext NOT NULL,
+      page_url longtext,
       PRIMARY KEY  (id)
    ) $charset_collate;";
 

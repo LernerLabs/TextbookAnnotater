@@ -27,7 +27,14 @@ function add_student_response_page($textbook_id, $texbook_name){
 		'post_author'   => 1,
 		'post_type' => 'page'
 	);
-	wp_insert_post( $post_details );
+	$page_id = wp_insert_post( $post_details );
+
+	global $wpdb; 
+	$postsTable = $wpdb->prefix.'posts'; 
+	$page = $wpdb->get_results ( "SELECT * FROM $postsTable WHERE ID = $page_id");
+	$textbookTable = $wpdb->prefix.'textbooks'; 
+	$texbook = $wpdb->get_results ( "SELECT * FROM $textbookTable WHERE id = $textbook_id");
+	$wpdb->update($textbookTable, array("page_url" => $page[0]->guid), array('id' => $textbook_id));
 
 }
 
@@ -131,7 +138,11 @@ function show_admin_page(){
 					echo "<input type='hidden' name='id' value='$texbook->id'>";
 					echo "<input type='hidden' name='textbook_name' value='$texbook->name'>";
 					echo "<button type='submit' name='delete_textbook' class='btn btn-danger'> Delete $texbook->name </button><br>";
-					echo "<button type='submit' name='add_textbook_page' class='btn btn-primary'> Add page for $texbook->name </button><br>";
+					if ($texbook->page_url == Null){
+						echo "<button type='submit' name='add_textbook_page' class='btn btn-primary'> Add page for $texbook->name </button><br>";
+					} else {
+						echo "<a target='_blank' href='$texbook->page_url'>View Page</a>";
+					}
 					echo "</form>";
 				}
 			?>
