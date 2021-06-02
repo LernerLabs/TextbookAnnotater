@@ -4,7 +4,7 @@
    Plugin URI: http://bookannotater.com
    description: a plugin to annotate textbooks
    Version: 0.1
-   Author: Ali Farahmand
+   Author: Ali Farahmand, Michael Lerner
    Author URI: https://af3.tech
    License: MIT
    */
@@ -47,5 +47,8 @@ function Textbook_create_table(){
    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
    dbDelta( $sql );
 }
+
+// uninstall steps
+require_once( TEXTBOOK_ANNOTATER__PLUGIN_DIR . 'uninstall.php' );
 
 ?>
