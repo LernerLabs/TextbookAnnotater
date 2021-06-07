@@ -53,6 +53,7 @@ function Create_textbook_responses_tables(){
       student_name tinytext NOT NULL,
       description mediumtext,
       textbook_id integer,
+      image_url mediumtext,
       PRIMARY KEY  (id)
    ) $charset_collate;";
    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

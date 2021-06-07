@@ -8,7 +8,7 @@ function student_responses_html_form_code($textbook_id) {
 		$textbook = get_textbook_by_id($textbook_id)[0];
 		echo "<p>" . $textbook->name . "</p>"; 
 	}
-	echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
+	echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post" enctype="multipart/form-data">';
 	echo '<p>';
 	echo 'Your Name (required) <br/>';
 	echo '<input type="text" name="student_name" pattern="[a-zA-Z0-9 ]+" value="' . ( isset( $_POST["student_name"] ) ? esc_attr( $_POST["student_name"] ) : '' ) . '" size="40" />';
@@ -22,6 +22,8 @@ function student_responses_html_form_code($textbook_id) {
 
 	echo "<input type='hidden' name='textbook_id' value='$textbook_id' >";
 
+	echo "<p> Image <input type='file' id='response_image' name='response_image'></input> </p>";
+
 	echo '<p><input type="submit" name="textbook_respones_submitted" value="Submit"></p>';
 	echo '</form>';
 }
@@ -29,6 +31,16 @@ function student_responses_html_form_code($textbook_id) {
 
 function create_student_textbook_response(){
 	if ( isset( $_POST['textbook_respones_submitted'] ) ) {
+		if(isset($_FILES['response_image'])){
+			require_once( ABSPATH . 'wp-admin/includes/image.php' );
+			require_once( ABSPATH . 'wp-admin/includes/file.php' );
+			require_once( ABSPATH . 'wp-admin/includes/media.php' );
+			$image = $_FILES['response_image'];
+			$uploaded=media_handle_upload('response_image', 0);
+			if(is_wp_error($uploaded)){
+				echo "Error uploading file: " . $uploaded->get_error_message();
+			}
+		}
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'student_responses';
 		$wpdb->insert( 
@@ -38,6 +50,7 @@ function create_student_textbook_response(){
 				'student_name' => $_POST['student_name'], 
 				'description' => $_POST['scientist_description'], 
 				'textbook_id' => $_POST['textbook_id'],
+				'image_url' => wp_get_attachment_url($uploaded),
 			)
 		);
 	}
@@ -45,8 +58,8 @@ function create_student_textbook_response(){
 
 function response_shortcode($atts){
 	$a = shortcode_atts( array(
-      'textbook_id' => 0
-   ), $atts );
+		'textbook_id' => 0
+	), $atts );
 
 	ob_start();
 	create_student_textbook_response();

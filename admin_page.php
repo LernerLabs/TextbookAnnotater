@@ -180,6 +180,7 @@ function show_admin_page(){
 					echo  "<p> $response->student_name <strong>/</strong> $response->description </p>";
 					$textbook = get_textbook_by_id($response->textbook_id)[0];
 					echo "<p>for textbook: $textbook->name </p>";
+					echo "<img width='100px' src='$response->image_url' >";
 					echo "<hr>";
 				}
 			?>
