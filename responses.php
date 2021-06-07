@@ -1,7 +1,7 @@
 <?php
 
 
-function student_respones_html_form_code($textbook_id) {
+function student_responses_html_form_code($textbook_id) {
 	if ($textbook_id == 0){
 		echo "unknown textbook";
 	} else {
@@ -50,7 +50,7 @@ function response_shortcode($atts){
 
 	ob_start();
 	create_student_textbook_response();
-	student_respones_html_form_code($a['textbook_id']);
+	student_responses_html_form_code($a['textbook_id']);
 
 	return ob_get_clean();
 }
