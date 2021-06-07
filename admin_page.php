@@ -38,6 +38,14 @@ function add_student_response_page($textbook_id, $texbook_name){
 
 }
 
+// get textbook by id
+function get_textbook_by_id($id){
+	global $wpdb;    
+	$textbookTable = $wpdb->prefix.'textbooks';
+	$result = $wpdb->get_results ( "SELECT * FROM $textbookTable WHERE id = $id");
+	return $result;
+}
+
 
 // get all textbooks from database
 function get_all_textbooks(){
