@@ -57,3 +57,10 @@ function response_shortcode($atts){
 
 
 add_shortcode( 'student_response_form', 'response_shortcode' );
+
+function get_all_student_responses(){
+	global $wpdb;    
+	$responsesTable = $wpdb->prefix.'student_responses';
+	$result = $wpdb->get_results ( "SELECT * FROM $responsesTable");
+	return $result;
+}

@@ -173,6 +173,13 @@ function show_admin_page(){
 		<div id="Responses" class="tabcontent">
 			<h3>Responses</h3>
 			<p>Manage student responses here!</p>
+			<hr>
+			<?php 
+				$all_student_responses = get_all_student_responses();
+				foreach($all_student_responses as $response){
+					echo  "<p> $response->student_name <strong>/</strong> $response->description </p>";
+				}
+			?>
 		</div>
 
 		<div id="About" class="tabcontent">
