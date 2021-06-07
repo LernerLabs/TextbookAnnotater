@@ -140,16 +140,16 @@ function show_admin_page(){
 			<h4>Current Textbooks</h4>
 			<?php 
 				$all_textbooks = get_all_textbooks();
-				foreach($all_textbooks as $texbook){
-					echo  "<p> $texbook->name <strong>by</strong> $texbook->author </p>";
+				foreach($all_textbooks as $textbook){
+					echo  "<p> $textbook->name <strong>by</strong> $textbook->author </p>";
 					echo "<form method='post'>";
-					echo "<input type='hidden' name='id' value='$texbook->id'>";
-					echo "<input type='hidden' name='textbook_name' value='$texbook->name'>";
-					echo "<button type='submit' name='delete_textbook' class='btn btn-danger'> Delete $texbook->name </button><br>";
-					if ($texbook->page_url == Null){
-						echo "<button type='submit' name='add_textbook_page' class='btn btn-primary'> Add page for $texbook->name </button><br>";
+					echo "<input type='hidden' name='id' value='$textbook->id'>";
+					echo "<input type='hidden' name='textbook_name' value='$textbook->name'>";
+					echo "<button type='submit' name='delete_textbook' class='btn btn-danger'> Delete $textbook->name </button><br>";
+					if ($textbook->page_url == Null){
+						echo "<button type='submit' name='add_textbook_page' class='btn btn-primary'> Add page for $textbook->name </button><br>";
 					} else {
-						echo "<a target='_blank' href='$texbook->page_url'>View Page</a>";
+						echo "<a target='_blank' href='$textbook->page_url'>View Page</a>";
 					}
 					echo "</form>";
 				}
@@ -178,6 +178,9 @@ function show_admin_page(){
 				$all_student_responses = get_all_student_responses();
 				foreach($all_student_responses as $response){
 					echo  "<p> $response->student_name <strong>/</strong> $response->description </p>";
+					$textbook = get_textbook_by_id($response->textbook_id)[0];
+					echo "<p>for textbook: $textbook->name </p>";
+					echo "<hr>";
 				}
 			?>
 		</div>
