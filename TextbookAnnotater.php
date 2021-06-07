@@ -59,6 +59,9 @@ function Create_textbook_responses_tables(){
    dbDelta( $sql );
 }
 
+// add response controller
+require_once( TEXTBOOK_ANNOTATER__PLUGIN_DIR . 'responses.php' );
+
 // uninstall steps
 require_once( TEXTBOOK_ANNOTATER__PLUGIN_DIR . 'uninstall.php' );
 

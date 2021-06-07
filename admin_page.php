@@ -22,7 +22,7 @@ function add_student_response_page($textbook_id, $texbook_name){
 	
 	$post_details = array(
 		'post_title'    => "Textbook " . $texbook_name,
-		'post_content'  => 'Content of your page for textbook ' . $texbook_name . ' with id: ' . $textbook_id,
+		'post_content'  => '[student_response_form textbook_id=' . $textbook_id . ']',
 		'post_status'   => 'publish',
 		'post_author'   => 1,
 		'post_type' => 'page'
