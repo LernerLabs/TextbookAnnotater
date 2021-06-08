@@ -77,3 +77,10 @@ function get_all_student_responses(){
 	$result = $wpdb->get_results ( "SELECT * FROM $responsesTable");
 	return $result;
 }
+
+
+function approve_student_response($id){
+	global $wpdb; 
+	$responsestable = $wpdb->prefix.'student_responses'; 
+	$wpdb->update($responsestable, array("approved" => 1), array('id' => $id));
+}

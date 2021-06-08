@@ -54,6 +54,7 @@ function Create_textbook_responses_tables(){
       description mediumtext,
       textbook_id integer,
       image_url mediumtext,
+      approved bool DEFAULT 0 NOT NULL,
       PRIMARY KEY  (id)
    ) $charset_collate;";
    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

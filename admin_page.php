@@ -117,6 +117,16 @@ function show_admin_page(){
 				}
 			?>
 
+			<!-- show alert for approving student response -->
+			<?php
+				if (isset($_POST['approve_student_response']) ){
+					approve_student_response($_POST["id"]);
+					echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
+					echo "student response approved!";
+					echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+					echo "</div>";
+				}
+			?>
 
 		</div>
 
@@ -180,6 +190,12 @@ function show_admin_page(){
 					echo  "<p> $response->student_name <strong>/</strong> $response->description </p>";
 					$textbook = get_textbook_by_id($response->textbook_id)[0];
 					echo "<p>for textbook: $textbook->name </p>";
+					if ($response->approved == 0){
+						echo "<form method='post'>";
+						echo "<input type='hidden' name='id' value='$response->id'>";
+						echo "<button type='submit' name='approve_student_response' class='btn btn-primary'>Approve</button>";
+						echo "</form>";
+					}
 					echo "<img width='100px' src='$response->image_url' >";
 					echo "<hr>";
 				}
