@@ -199,9 +199,14 @@ function show_admin_page(){
 			<?php 
 				$all_student_responses = get_all_student_responses();
 				foreach($all_student_responses as $response){
+					$outfname = preg_replace("/[^A-Za-z0-9]/", '', $response->student_name); # should be scientist name
+					$outfname = $outfname . ".pptx";
+
 					echo  "<p> $response->student_name <strong>/</strong> $response->description </p>";
 					$textbook = get_textbook_by_id($response->textbook_id)[0];
+					# have to figure out where to put the files so that we can downloda them directly.
 					echo "<p>for textbook: $textbook->name </p>";
+					echo '<p><a href="' . $outfname. '">' . $response->student_name . ' Powerpoint</a>';
 					echo "<hr>";
 
 					# Now make the PPTX files
@@ -235,8 +240,7 @@ function show_admin_page(){
 						->setSize(60)
 						->setColor( new Color('FFE06B20'));
 					$oWriterPPTX = IOFactory::createWriter($objPHPPowerPoint, 'PowerPoint2007');
-					$outfname = preg_replace("/[^A-Za-z0-9]/", '', $response->student_name); # should be scientist name
-					$oWriterPPTX->save(__DIR__ . "/" . $outfname .".pptx");
+					$oWriterPPTX->save(__DIR__ . "/" . $outfname );
 
 					# And the instructor notes
 					$oNote = $currentSlide->getNote();
@@ -256,6 +260,8 @@ function show_admin_page(){
 #					$note = $currentSlide->getNote();
 #					$noteText = $note->createRichTextShape()->setHeight(300)->setWidth(600);
 #					$noteText->createTextRun($response->description);
+
+# NEITHER OF THE ABOVE TWO METHODS WORK.
 
 					
 				}
