@@ -17,6 +17,18 @@ wp_enqueue_style('admin_page_css');
 wp_register_script( 'admin_page_js',TEXTBOOK_ANNOTATER__PLUGIN_URL . "assets/js/admin_page.js");
 wp_enqueue_script('admin_page_js');
 
+$file1 = plugin_dir_path( __FILE__ ) . "vendor/autoload.php";
+require_once $file1;
+use PhpOffice\PhpPresentation\PhpPresentation;
+use PhpOffice\PhpPresentation\IOFactory;
+use PhpOffice\PhpPresentation\Style\Color;
+use PhpOffice\PhpPresentation\Style\Alignment;
+
+
+
+
+
+
 // add student response form page for textbook
 function add_student_response_page($textbook_id, $texbook_name){
 	
@@ -86,7 +98,7 @@ function show_admin_page(){
 		<div class="col-sm-6">
 			<!-- show alert for creating textbook -->
 			<?php 
-			if(isset($_POST['submit']) && $_POST['submit'] == "Add new textbook") {
+			if(isset($_POST['submit']) && $_POST['submit'] == "add_new_textbook") {
 				add_new_textbook($_POST["name"], $_POST["author"]);
 				echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
 				echo "textbook " . $_POST['name'] . " created!";
@@ -130,6 +142,16 @@ function show_admin_page(){
 		<div id="Home" class="tabcontent">
 			<h3>Home</h3>
 			<p>Plugin main settings!</p>
+
+<?php 
+#      echo "<pre>";
+#      print_r(get_loaded_extensions());
+#      $file1 = plugin_dir_path( __FILE__ ) . "vendor/autoload.php";
+#      require_once $file1;
+#      print_r(get_loaded_extensions());
+#      #use PhpOffice\PhpPresentation\PhpPresentation;
+#      echo "<pre/>";
+ ?>
 		</div>
 
 		<div id="Textbooks" class="tabcontent">
@@ -165,7 +187,7 @@ function show_admin_page(){
 					<label for="textbook_author" class="form-label">Textbook Author</label>
 					<input type="text" class="form-control" id="textbook_author" name="author" required>
 
-					<?php submit_button($name = 'Add new textbook')?>
+					<?php submit_button($text = 'Add a new textbook', $name = 'add_new_textbook')?>
 				</form>
 			</div>
 		</div>
@@ -181,6 +203,61 @@ function show_admin_page(){
 					$textbook = get_textbook_by_id($response->textbook_id)[0];
 					echo "<p>for textbook: $textbook->name </p>";
 					echo "<hr>";
+
+					# Now make the PPTX files
+					# Later versions will make individual slides plus a textbook slidedeck. For now, just individual slides.
+					$objPHPPowerPoint = new PhpPresentation();
+					$currentSlide = $objPHPPowerPoint->getActiveSlide();
+					
+					$image_filename = plugin_dir_path( __FILE__ ) . "./vendor/phpoffice/phppresentation/samples/resources/phppowerpoint_logo.gif";
+					$image_filename = plugin_dir_path( __FILE__ ) . "Noether.jpg";
+					$shape = $currentSlide->createDrawingShape();
+					# We'll assume about 96 pixels per inch.
+					$shape->setName('PHPPresentation logo')
+					      ->setDescription('PHPPresentation logo')
+					      ->setPath($image_filename)
+					      ->setHeight(5*96)
+					      ->setOffsetX(0.5*96)
+					      ->setOffsetY(0.5*96);
+					# Give it a drop shadow
+					$shape->getShadow()->setVisible(true)
+					                   ->setDirection(45)
+							   ->setDistance(10);
+				        # And the text
+					$shape = $currentSlide->createRichTextShape()
+					      ->setHeight(300)
+					      ->setWidth(600)
+					      ->setOffsetX(96*3)
+					      ->setOffsetY(180);
+					$shape->getActiveParagraph()->getAlignment()->setHorizontal( Alignment::HORIZONTAL_CENTER );
+					$textRun = $shape->createTextRun($response->student_name); # should be scientist name
+					$textRun->getFont()->setBold(true)
+						->setSize(60)
+						->setColor( new Color('FFE06B20'));
+					$oWriterPPTX = IOFactory::createWriter($objPHPPowerPoint, 'PowerPoint2007');
+					$outfname = preg_replace("/[^A-Za-z0-9]/", '', $response->student_name); # should be scientist name
+					$oWriterPPTX->save(__DIR__ . "/" . $outfname .".pptx");
+
+					# And the instructor notes
+					$oNote = $currentSlide->getNote();
+					$oProperties = $objPHPPowerPoint->getPresentationProperties();
+					$oProperties->setCommentVisible(true);
+					
+					$oRichText = $oNote->createRichTextShape()
+					    ->setHeight(60)
+					    ->setWidth(60)
+					    ->setOffsetX(170)
+					    ->setOffsetY(180);
+					$oRichText->createTextRun('A class library');
+					$oRichText->createParagraph()->createTextRun('Written in PHP');
+					$oRichText->createParagraph()->createTextRun('Representing a presentation');
+					$oRichText->createParagraph()->createTextRun('Supports writing to different file formats');
+
+#					$note = $currentSlide->getNote();
+#					$noteText = $note->createRichTextShape()->setHeight(300)->setWidth(600);
+#					$noteText->createTextRun($response->description);
+
+					
 				}
 			?>
 		</div>

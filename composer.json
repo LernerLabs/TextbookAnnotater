@@ -1,0 +1,13 @@
+{
+    "name": "mglerner/textbook-annotater",
+    "type": "wordpress-plugin",
+    "require": {
+        "phpoffice/phppresentation": "^0.9.0"
+    },
+    "license": "LGPL",
+    "autoload": {
+        "psr-4": {
+            "Mglerner\\TextbookAnnotater\\": "src/"
+        }
+    }
+}
