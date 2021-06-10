@@ -1,7 +1,13 @@
 <?php
 
-$file1 = plugin_dir_path( __FILE__ ) . "vendor/autoload.php";
-require_once $file1;
+#$file1 =  "vendor/autoload.php";
+#require_once $file1;
+
+require_once plugin_dir_path( __FILE__ ) . 'src/PHPPresentation/src/PhpPresentation/Autoloader.php';
+\PhpOffice\PhpPresentation\Autoloader::register();
+require_once plugin_dir_path( __FILE__ ) . 'src/Common/src/Common/Autoloader.php';
+\PhpOffice\Common\Autoloader::register();
+
 use PhpOffice\PhpPresentation\PhpPresentation;
 use PhpOffice\PhpPresentation\IOFactory;
 use PhpOffice\PhpPresentation\Style\Color;
