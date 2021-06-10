@@ -80,6 +80,9 @@ function approved_student_responses_page($textbook_id){
 	foreach ($result as $response) {
 		echo "<p> $response->student_name </p>";
 		echo "<p> $response->description";
+		if ($response->image_url != Null){
+			echo "<img src=$response->image_url width='100px' />";	
+		}
 		echo "<hr>";
 	}
 
