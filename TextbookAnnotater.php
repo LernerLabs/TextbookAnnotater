@@ -42,7 +42,8 @@ function Create_textbook_responses_tables(){
       time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
       name tinytext NOT NULL,
       author tinytext NOT NULL,
-      page_url mediumtext,
+      form_page_url mediumtext,
+      responses_page_url mediumtext,
       PRIMARY KEY  (id)
    ) $charset_collate;";
 

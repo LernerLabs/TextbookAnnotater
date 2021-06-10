@@ -21,7 +21,7 @@ wp_enqueue_script('admin_page_js');
 function add_student_response_page($textbook_id, $texbook_name){
 	
 	$post_details = array(
-		'post_title'    => "Textbook " . $texbook_name,
+		'post_title'    => "Textbook " . $texbook_name . " Form",
 		'post_content'  => '[student_response_form textbook_id=' . $textbook_id . ']',
 		'post_status'   => 'publish',
 		'post_author'   => 1,
@@ -34,7 +34,28 @@ function add_student_response_page($textbook_id, $texbook_name){
 	$page = $wpdb->get_results ( "SELECT * FROM $postsTable WHERE ID = $page_id");
 	$textbookTable = $wpdb->prefix.'textbooks'; 
 	$texbook = $wpdb->get_results ( "SELECT * FROM $textbookTable WHERE id = $textbook_id");
-	$wpdb->update($textbookTable, array("page_url" => $page[0]->guid), array('id' => $textbook_id));
+	$wpdb->update($textbookTable, array("form_page_url" => $page[0]->guid), array('id' => $textbook_id));
+
+}
+
+// add approved student responses page for textbook
+function add_approved_student_responses_page($textbook_id, $texbook_name){
+	
+	$post_details = array(
+		'post_title'    => "Textbook " . $texbook_name . " Responses",
+		'post_content'  => '[approved_student_responses textbook_id=' . $textbook_id . ']',
+		'post_status'   => 'publish',
+		'post_author'   => 1,
+		'post_type' => 'page'
+	);
+	$page_id = wp_insert_post( $post_details );
+
+	global $wpdb; 
+	$postsTable = $wpdb->prefix.'posts'; 
+	$page = $wpdb->get_results ( "SELECT * FROM $postsTable WHERE ID = $page_id");
+	$textbookTable = $wpdb->prefix.'textbooks'; 
+	$texbook = $wpdb->get_results ( "SELECT * FROM $textbookTable WHERE id = $textbook_id");
+	$wpdb->update($textbookTable, array("responses_page_url" => $page[0]->guid), array('id' => $textbook_id));
 
 }
 
@@ -106,16 +127,18 @@ function show_admin_page(){
 				}
 			?>
 
-			<!-- show alert for adding page -->
+			<!-- show alert for adding form page -->
 			<?php
-				if (isset($_POST['add_textbook_page']) ){
+				if (isset($_POST['add_textbook_form_page']) ){
 					add_student_response_page($_POST["id"], $_POST["textbook_name"]);
 					echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
-					echo "page added!";
+					echo "Form page created!";
 					echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
 					echo "</div>";
 				}
 			?>
+
+
 
 			<!-- show alert for approving student response -->
 			<?php
@@ -123,6 +146,17 @@ function show_admin_page(){
 					approve_student_response($_POST["id"]);
 					echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
 					echo "student response approved!";
+					echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+					echo "</div>";
+				}
+			?>
+
+			<!-- show alert for adding responses page -->
+			<?php
+				if (isset($_POST['add_textbook_responses_page']) ){
+					add_approved_student_responses_page($_POST["id"], $_POST["textbook_name"]);
+					echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
+					echo "Responses page created!";
 					echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
 					echo "</div>";
 				}
@@ -156,10 +190,15 @@ function show_admin_page(){
 					echo "<input type='hidden' name='id' value='$textbook->id'>";
 					echo "<input type='hidden' name='textbook_name' value='$textbook->name'>";
 					echo "<button type='submit' name='delete_textbook' class='btn btn-danger'> Delete $textbook->name </button><br>";
-					if ($textbook->page_url == Null){
-						echo "<button type='submit' name='add_textbook_page' class='btn btn-primary'> Add page for $textbook->name </button><br>";
+					if ($textbook->form_page_url == Null){
+						echo "<button type='submit' name='add_textbook_form_page' class='btn btn-primary'> Add form page for $textbook->name </button><br>";
 					} else {
-						echo "<a target='_blank' href='$textbook->page_url'>View Page</a>";
+						echo "<a target='_blank' href='$textbook->form_page_url'>View Form Page</a>";
+					}
+					if ($textbook->responses_page_url == Null){
+						echo "<button type='submit' name='add_textbook_responses_page' class='btn btn-primary'> Add responses page for $textbook->name </button><br>";
+					} else {
+						echo "<a target='_blank' href='$textbook->responses_page_url'>View Responses Page</a>";
 					}
 					echo "</form>";
 				}
