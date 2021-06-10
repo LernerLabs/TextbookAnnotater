@@ -1,6 +1,6 @@
 <?php
 
-
+// add form for response page
 function student_responses_html_form_code($textbook_id) {
 	if ($textbook_id == 0){
 		echo "unknown textbook";
@@ -29,6 +29,7 @@ function student_responses_html_form_code($textbook_id) {
 }
 
 
+// create new response in database (from form)
 function create_student_textbook_response(){
 	if ( isset( $_POST['textbook_respones_submitted'] ) ) {
 		if(isset($_FILES['response_image'])){
@@ -56,7 +57,8 @@ function create_student_textbook_response(){
 	}
 }
 
-function response_shortcode($atts){
+// create shortcode for displaying the page form
+function response_form_shortcode($atts){
 	$a = shortcode_atts( array(
 		'textbook_id' => 0
 	), $atts );
@@ -67,10 +69,37 @@ function response_shortcode($atts){
 
 	return ob_get_clean();
 }
+add_shortcode( 'student_response_form', 'response_form_shortcode' );
+
+// add view for approved student responses page
+function approved_student_responses_page($textbook_id){
+	global $wpdb;
+	$responsesTable = $wpdb->prefix.'student_responses';
+	$result = $wpdb->get_results ( "SELECT * FROM $responsesTable WHERE textbook_id = $textbook_id");
+
+	foreach ($result as $response) {
+		echo "<p> $response->student_name </p>";
+		echo "<p> $response->description";
+		echo "<hr>";
+	}
+
+}
+
+// create shortcode for approved student responses page
+function approved_student_responses_shortcode($atts){
+	$a = shortcode_atts( array(
+		'textbook_id' => 0
+	), $atts );
+
+	ob_start();
+	approved_student_responses_page($a['textbook_id']);
+	return ob_get_clean();
+
+}
+add_shortcode( 'approved_student_responses', 'approved_student_responses_shortcode' );
 
 
-add_shortcode( 'student_response_form', 'response_shortcode' );
-
+// helper to get array of all students
 function get_all_student_responses(){
 	global $wpdb;    
 	$responsesTable = $wpdb->prefix.'student_responses';
@@ -79,6 +108,7 @@ function get_all_student_responses(){
 }
 
 
+// change student response status to approved
 function approve_student_response($id){
 	global $wpdb; 
 	$responsestable = $wpdb->prefix.'student_responses'; 
