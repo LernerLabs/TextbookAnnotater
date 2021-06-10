@@ -66,6 +66,9 @@ function Create_textbook_responses_tables(){
 // add response controller
 require_once( TEXTBOOK_ANNOTATER__PLUGIN_DIR . 'responses.php' );
 
+// add slide generator
+require_once( TEXTBOOK_ANNOTATER__PLUGIN_DIR . 'slide_generator.php' );
+
 // uninstall steps
 require_once( TEXTBOOK_ANNOTATER__PLUGIN_DIR . 'uninstall.php' );
 

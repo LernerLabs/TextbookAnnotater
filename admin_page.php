@@ -214,7 +214,7 @@ function show_admin_page(){
 					<label for="textbook_author" class="form-label">Textbook Author</label>
 					<input type="text" class="form-control" id="textbook_author" name="author" required>
 
-                    <?php submit_button($text="Add the textbook", $name = 'add_new_textbook')?>
+                    <?php submit_button($text='Add the textbook',$name = 'add_new_textbook')?>
 				</form>
 			</div>
 		</div>

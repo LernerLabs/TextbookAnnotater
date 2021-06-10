@@ -54,7 +54,7 @@ function create_student_textbook_response(){
 			array( 
 				'time' => current_time( 'mysql' ), 
 				'student_name' => $_POST['student_name'], 
-				'scientist_name' => $_POST['scienist_name'], 
+				'scientist_name' => $_POST['scientist_name'], 
 				'description' => $_POST['scientist_description'], 
 				'textbook_id' => $_POST['textbook_id'],
 				'image_url' => wp_get_attachment_url($uploaded),
