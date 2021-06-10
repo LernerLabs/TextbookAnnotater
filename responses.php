@@ -14,6 +14,11 @@ function student_responses_html_form_code($textbook_id) {
 	echo '<input type="text" name="student_name" pattern="[a-zA-Z0-9 ]+" value="' . ( isset( $_POST["student_name"] ) ? esc_attr( $_POST["student_name"] ) : '' ) . '" size="40" />';
 	echo '</p>';
 
+	echo '<p>';
+	echo 'Scientist Name (required) <br/>';
+	echo '<input type="text" name="scientist_name" pattern="[a-zA-Z0-9 ]+" value="' . ( isset( $_POST["scientist_name"] ) ? esc_attr( $_POST["scientist_name"] ) : '' ) . '" size="40" />';
+	echo '</p>';
+    
 
 	echo '<p>';
 	echo 'Scientist Description (required) <br/>';
@@ -49,6 +54,7 @@ function create_student_textbook_response(){
 			array( 
 				'time' => current_time( 'mysql' ), 
 				'student_name' => $_POST['student_name'], 
+				'scientist_name' => $_POST['scienist_name'], 
 				'description' => $_POST['scientist_description'], 
 				'textbook_id' => $_POST['textbook_id'],
 				'image_url' => wp_get_attachment_url($uploaded),

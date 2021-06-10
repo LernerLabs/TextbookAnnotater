@@ -52,6 +52,7 @@ function Create_textbook_responses_tables(){
       id mediumint(9) NOT NULL AUTO_INCREMENT,
       time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
       student_name tinytext NOT NULL,
+      scientist_name tinytext NOT NULL,
       description mediumtext,
       textbook_id integer,
       image_url mediumtext,
