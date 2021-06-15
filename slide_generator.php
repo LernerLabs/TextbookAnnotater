@@ -90,7 +90,6 @@ function get_presentation_as_php($oPHPPresentation){
     $oWriterPPTX = IOFactory::createWriter($oPHPPresentation, 'PowerPoint2007');
     header("Content-Type: application/vnd.openxmlformats-officedocument.presentationml.presentation");
     header("Content-Disposition: attachment; filename=test.pptx");
-    $oWriterPPTX = IOFactory::createWriter($this->objPhpPresentation,'PowerPoint2007' );
     $oWriterPPTX->save('php://output');    
 }
 
