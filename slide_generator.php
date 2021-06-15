@@ -30,6 +30,7 @@ function generate_single_response_slide($currentSlide, $oPHPPresentation, $img_u
     # only work if we had a JPEG. Need a more general version.
 
     //$img_url ="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Noether.jpg/220px-Noether.jpg";
+    // https://www.opentooleveryone.com/blog/phpoffice-phppresentation-creating-the-images-slide-dynamically-getting-the-source-from-some-db
     $imageData = "data:image/jpeg;base64,".base64_encode(file_get_contents($img_url));
     #list($width, $height) = getimagesize($img_url);
     $shape = new Drawing\Base64();
@@ -87,10 +88,16 @@ function generate_and_download_slide($img_url, $scientist_name, $description){
 
 function get_presentation_as_php($oPHPPresentation){
     // https://stackoverflow.com/questions/8566196/phpexcel-to-download
-    $oWriterPPTX = IOFactory::createWriter($oPHPPresentation, 'PowerPoint2007');
+    $oWriterPPTX = IOFactory::createWriter($oPHPPresentation, 'PowerPoint2007', $download=true);
+    
+    header("Content-Description: File Transfer");
     header("Content-Type: application/vnd.openxmlformats-officedocument.presentationml.presentation");
-    header("Content-Disposition: attachment; filename=test.pptx");
-    $oWriterPPTX->save('php://output');    
+    header("Content-Disposition: attachment; filename=test.pptx"); // could fix this
+    header('Content-Transfer-Encoding: binary');
+    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+    header('Expires: 0');
+    $oWriterPPTX->save('php://output');
+
 }
 
 function put_presentation_in_database_and_get_url($oPHPPresentation){

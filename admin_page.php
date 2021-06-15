@@ -249,12 +249,14 @@ function show_admin_page(){
 					echo "<img width='100px' src='$response->image_url' >";
                     // make a button that is a submit button in a form that sends a post request that just calls
                     // the get_presentation_as_php function
-                    echo "<form method='post'>";
+                    echo "<form method='post' action='" . TEXTBOOK_ANNOTATER__PLUGIN_URL . "slide_download.php'>";
+                    //echo "<form method='post'>";
                     echo "<input type='hidden' name='image_url' value='$response->image_url'>";
                     echo "<input type='hidden' name='scientist_name' value='$response->scientist_name'>";
                     echo "<input type='hidden' name='description' value='$response->description'>";
                     echo "<button type='submit' name='download_slide' class='btn btn-primary'>Download PPTX slide</button>";
                     echo "</form>";
+                    echo TEXTBOOK_ANNOTATER__PLUGIN_URL . "slide_download.php";
                     //$ssp = generate_single_slide_presentation($response);
                     //$uploaded_url = put_presentation_in_database_and_get_url($ssp);
                     //echo "<pre>";
