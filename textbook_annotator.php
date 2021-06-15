@@ -64,6 +64,12 @@ register_activation_hook( __FILE__, 'activate_textbook_annotator' );
 register_deactivation_hook( __FILE__, 'deactivate_textbook_annotator' );
 
 
+// add response controller
+require_once( TEXTBOOK_ANNOTATER__PLUGIN_DIR . 'includes/responses_controller.php' );
+
+// add textbook controller
+require_once( TEXTBOOK_ANNOTATER__PLUGIN_DIR . 'includes/textbook_controller.php' );
+
 // Get the Admin page view
 require_once( TEXTBOOK_ANNOTATER__PLUGIN_DIR . 'admin/admin_page.php' );
 
@@ -76,5 +82,3 @@ function textbook_annotater_setup_menu(){
 }
 
 
-// add response controller
-require_once( TEXTBOOK_ANNOTATER__PLUGIN_DIR . 'includes/responses.php' );
