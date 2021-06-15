@@ -256,7 +256,6 @@ function show_admin_page(){
                     echo "<input type='hidden' name='description' value='$response->description'>";
                     echo "<button type='submit' name='download_slide' class='btn btn-primary'>Download PPTX slide</button>";
                     echo "</form>";
-                    echo TEXTBOOK_ANNOTATER__PLUGIN_URL . "slide_download.php";
                     //$ssp = generate_single_slide_presentation($response);
                     //$uploaded_url = put_presentation_in_database_and_get_url($ssp);
                     //echo "<pre>";

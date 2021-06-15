@@ -16,8 +16,6 @@ use PhpOffice\PhpPresentation\Style\Alignment;
 use PhpOffice\PhpPresentation\Shape\Drawing;
 
 function generate_single_response_slide($currentSlide, $oPHPPresentation, $image_url, $scientist_name, $description){
-    // API change: eventually, this gets called from a form, and so we don't bundle
-    // everything up as a response. We call iwth the individual bits of data we need.
     # TODO: FIXME:
     # we used to do this when it was a file.
     #$shape = $currentSlide->createDrawingShape();
@@ -66,6 +64,7 @@ function generate_single_response_slide($currentSlide, $oPHPPresentation, $image
                        ->setOffsetY(180);
 	$oRichText->createTextRun('Description of Scientist:');
 	$oRichText->createParagraph()->createTextRun($description);
+	#$oRichText->createParagraph()->createTextRun($image_url);
 }
 
 function generate_single_slide_presentation($image_url, $scientist_name, $description){
@@ -77,9 +76,6 @@ function generate_single_slide_presentation($image_url, $scientist_name, $descri
 }
 
 
-#$image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Noether.jpg/220px-Noether.jpg";
-#$scientist_name = "A Scientist Name";
-#$description = "A description of a Scientist";
 $scientist_name = $_POST['scientist_name'];
 $image_url = $_POST['image_url'];
 $description = $_POST['description'];
