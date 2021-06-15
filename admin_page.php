@@ -168,7 +168,7 @@ function show_admin_page(){
             <!-- download a slide -->
             <?php
                  if (isset($_POST['download_slide']) ){
-                     generate_and_download_slide($_POST["img_url"], $_POST["scientist_name"], $_POST["description"],);
+                     generate_and_download_slide($_POST["image_url"], $_POST["scientist_name"], $_POST["description"],);
                      echo "<pre>Why are you looking at me</pre>";
                  }
             ?>
