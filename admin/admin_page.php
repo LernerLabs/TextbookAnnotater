@@ -12,11 +12,11 @@ function textbook_annotater_add_css_js() {
 	wp_enqueue_script('bootstrap_js');
 
 	// add css
-	wp_register_style( 'admin_page_css', TEXTBOOK_ANNOTATER__PLUGIN_URL . '/assets/css/admin_page.css' );
+	wp_register_style( 'admin_page_css', TEXTBOOK_ANNOTATER__PLUGIN_URL . 'admin/assets/css/admin_page.css' );
 	wp_enqueue_style('admin_page_css');
 
 	// add js
-	wp_register_script( 'admin_page_js',TEXTBOOK_ANNOTATER__PLUGIN_URL . "assets/js/admin_page.js");
+	wp_register_script( 'admin_page_js',TEXTBOOK_ANNOTATER__PLUGIN_URL . "admin/assets/js/admin_page.js");
 	wp_enqueue_script('admin_page_js');
 }
 add_action( 'admin_enqueue_scripts', 'textbook_annotater_add_css_js' );
