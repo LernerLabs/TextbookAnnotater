@@ -110,7 +110,7 @@ function show_admin_page(){
 				$all_textbooks = get_all_textbooks();
 				if ($all_textbooks->have_posts() ) : 
 					while ( $all_textbooks->have_posts() ) : $all_textbooks->the_post();
-						echo  "<p>" .  get_the_title() . " <strong>by</strong> author </p>";
+						echo  "<p>" .  get_the_title() . " <strong>by</strong> " . get_post_meta( get_the_ID(), '_textbook_annotator_author_meta_key', true ) ." </p>";
 					endwhile;
 				wp_reset_postdata();
 				endif;
@@ -145,7 +145,7 @@ function show_admin_page(){
 					<label for="textbook_author" class="form-label">Textbook Author</label>
 					<input type="text" class="form-control" id="textbook_author" name="author" required>
 
-					<?php submit_button($text = 'Add Textbook', $name = 'add_new_textbook')?>
+					<?php submit_button($name = 'add_new_textbook')?>
 				</form>
 			</div>
 		</div>
