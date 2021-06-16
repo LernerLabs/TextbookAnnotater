@@ -109,8 +109,6 @@ function show_admin_page(){
 				$all_student_responses = get_all_student_responses();
 				foreach($all_student_responses as $response){
 					echo  "<p> $response->student_name <strong>/</strong> $response->description </p>";
-					$textbook = get_textbook_by_id($response->textbook_id)[0];
-					echo "<p>for textbook: $textbook->name </p>";
 					if ($response->approved == 0){
 						echo "<form method='post'>";
 						echo "<input type='hidden' name='id' value='$response->id'>";
