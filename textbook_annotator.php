@@ -81,21 +81,3 @@ function textbook_annotater_setup_menu(){
     add_menu_page( 'Textbook Annotater Admin', 'Textbook Annotater', 'manage_options', 'textbook_annotater_plugin', 'show_admin_page' );
 }
 
-
-// add custom post type for textbooks
-function create_textbook_custom_post_type() {
-    register_post_type('textbook_annotator',
-        array(
-            'labels'      => array(
-                'name'          => __('Textbooks', 'textdomain'),
-                'singular_name' => __('Textbook', 'textdomain'),
-            ),
-                'public'      => true,
-                'has_archive' => true,
-                'publicly_queryable' => true,
-                'menu_icon' => 'dashicons-book-alt',
-                'rewrite'     => array( 'slug' => 'textbooks' ),
-        )
-    );
-}
-add_action('init', 'create_textbook_custom_post_type');
