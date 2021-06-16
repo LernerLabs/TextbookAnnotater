@@ -53,11 +53,14 @@ function get_textbook_by_id($id){
 
 // get all textbooks from database
 function get_all_textbooks(){
+	$args = array(  
+        'post_type' => 'textbook_annotator',
+        'post_status' => 'publish',
+        'posts_per_page' => -1,
+    );
 
-	global $wpdb;    
-	$textbookTable = $wpdb->prefix.'textbooks';
-	$result = $wpdb->get_results ( "SELECT * FROM $textbookTable");
-	return $result;
+    $loop = new WP_Query( $args ); 
+    return $loop;
 }
 
 // add new textbook into database

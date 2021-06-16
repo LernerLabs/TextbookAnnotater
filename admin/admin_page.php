@@ -108,24 +108,31 @@ function show_admin_page(){
 			<h4>Current Textbooks</h4>
 			<?php 
 				$all_textbooks = get_all_textbooks();
-				foreach($all_textbooks as $textbook){
-					echo  "<p> $textbook->name <strong>by</strong> $textbook->author </p>";
-					echo "<form method='post'>";
-					echo "<input type='hidden' name='id' value='$textbook->id'>";
-					echo "<input type='hidden' name='textbook_name' value='$textbook->name'>";
-					echo "<button type='submit' name='delete_textbook' class='btn btn-danger'> Delete $textbook->name </button><br>";
-					if ($textbook->form_page_url == Null){
-						echo "<button type='submit' name='add_textbook_form_page' class='btn btn-primary'> Add form page for $textbook->name </button><br>";
-					} else {
-						echo "<a target='_blank' href='$textbook->form_page_url'>View Form Page</a>";
-					}
-					if ($textbook->responses_page_url == Null){
-						echo "<button type='submit' name='add_textbook_responses_page' class='btn btn-primary'> Add responses page for $textbook->name </button><br>";
-					} else {
-						echo "<a target='_blank' href='$textbook->responses_page_url'>View Responses Page</a>";
-					}
-					echo "</form>";
-				}
+				if ($all_textbooks->have_posts() ) : 
+					while ( $all_textbooks->have_posts() ) : $all_textbooks->the_post();
+						echo  "<p>" .  get_the_title() . " <strong>by</strong> author </p>";
+					endwhile;
+				wp_reset_postdata();
+				endif;
+					
+				// foreach($all_textbooks as $textbook){
+				// 	echo  "<p> $textbook->name <strong>by</strong> $textbook->author </p>";
+				// 	echo "<form method='post'>";
+				// 	echo "<input type='hidden' name='id' value='$textbook->id'>";
+				// 	echo "<input type='hidden' name='textbook_name' value='$textbook->name'>";
+				// 	echo "<button type='submit' name='delete_textbook' class='btn btn-danger'> Delete $textbook->name </button><br>";
+				// 	if ($textbook->form_page_url == Null){
+				// 		echo "<button type='submit' name='add_textbook_form_page' class='btn btn-primary'> Add form page for $textbook->name </button><br>";
+				// 	} else {
+				// 		echo "<a target='_blank' href='$textbook->form_page_url'>View Form Page</a>";
+				// 	}
+				// 	if ($textbook->responses_page_url == Null){
+				// 		echo "<button type='submit' name='add_textbook_responses_page' class='btn btn-primary'> Add responses page for $textbook->name </button><br>";
+				// 	} else {
+				// 		echo "<a target='_blank' href='$textbook->responses_page_url'>View Responses Page</a>";
+				// 	}
+				// 	echo "</form>";
+				// }
 			?>
 
 			<hr>
@@ -138,7 +145,7 @@ function show_admin_page(){
 					<label for="textbook_author" class="form-label">Textbook Author</label>
 					<input type="text" class="form-control" id="textbook_author" name="author" required>
 
-					<?php submit_button($name = 'add_new_textbook')?>
+					<?php submit_button($text = 'Add Textbook', $name = 'add_new_textbook')?>
 				</form>
 			</div>
 		</div>
