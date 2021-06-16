@@ -37,20 +37,9 @@ class Textbook_annotator_Activator {
  function Create_textbook_responses_tables(){
 
 	global $wpdb;
-	$textbooks_table_name = $wpdb->prefix . 'textbooks';
 	$charset_collate = $wpdb->get_charset_collate();
 
 	$sql = array();
-
-	$sql[] = "CREATE TABLE $textbooks_table_name (
-	   id mediumint(9) NOT NULL AUTO_INCREMENT,
-	   time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-	   name tinytext NOT NULL,
-	   author tinytext NOT NULL,
-	   form_page_url mediumtext,
-	   responses_page_url mediumtext,
-	   PRIMARY KEY  (id)
-	) $charset_collate;";
 
 	$responses_table_name = $wpdb->prefix . 'student_responses';
 	$sql[] = "CREATE TABLE $responses_table_name (
