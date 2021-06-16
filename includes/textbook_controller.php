@@ -48,6 +48,25 @@ function textbook_annotator_save_postdata( $post_id ) {
 }
 add_action( 'save_post', 'textbook_annotator_save_postdata' );
 
+
+// add custom template for textbook custom post type
+/* Filter the single_template with our custom function*/
+add_filter('single_template', 'textbook_custom_post_template');
+function textbook_custom_post_template($single) {
+
+    global $post;
+
+    /* Checks for single template by post type */
+    if ( $post->post_type == 'textbook_annotator' ) {
+        if ( file_exists( TEXTBOOK_ANNOTATER__PLUGIN_DIR . 'includes/single-textbook_annotator.php' ) ) {
+            return TEXTBOOK_ANNOTATER__PLUGIN_DIR . 'includes/single-textbook_annotator.php';
+        }
+    }
+
+    return $single;
+
+}
+
 // add student response form page for textbook
 function add_student_response_page($textbook_id, $texbook_name){
 	
@@ -113,18 +132,27 @@ function get_all_textbooks(){
 
 // add new textbook into database
 function add_new_textbook($name, $author){
-	
-	global $wpdb;
-	$table_name = $wpdb->prefix . 'textbooks';
-	$wpdb->insert( 
-		$table_name,
-		array( 
-			'time' => current_time( 'mysql' ), 
-			'name' => $name, 
-			'author' => $author, 
-		)
-	);
+	global $user_ID;
+
+	// create post
+    $new_post = array(
+        'post_title' => "Textbook " . $name,
+        'post_content' => "",
+        'post_status' => 'publish',
+        'post_date' => date('Y-m-d H:i:s'),
+        'post_author' => $user_ID,
+        'post_type' => 'textbook_annotator',
+    );
+    $post_id = wp_insert_post($new_post);
+
+    // update meta for the author
+    update_post_meta(
+        $post_id,
+        '_textbook_annotator_author_meta_key',
+        $author
+    );
 }
+
 
 // delete textbook from database
 function delete_textbook($id){

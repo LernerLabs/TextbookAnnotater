@@ -40,29 +40,6 @@ function show_admin_page(){
 			}
 			?>
 
-			<!-- show alert for deleting textbook -->
-			<?php
-				if (isset($_POST['delete_textbook']) ){
-					delete_textbook($_POST["id"]);
-					echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
-					echo "textbook with id " . $_POST['id'] . " deleted!";
-					echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-					echo "</div>";
-				}
-			?>
-
-			<!-- show alert for adding form page -->
-			<?php
-				if (isset($_POST['add_textbook_form_page']) ){
-					add_student_response_page($_POST["id"], $_POST["textbook_name"]);
-					echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
-					echo "Form page created!";
-					echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-					echo "</div>";
-				}
-			?>
-
-
 
 			<!-- show alert for approving student response -->
 			<?php
@@ -75,16 +52,6 @@ function show_admin_page(){
 				}
 			?>
 
-			<!-- show alert for adding responses page -->
-			<?php
-				if (isset($_POST['add_textbook_responses_page']) ){
-					add_approved_student_responses_page($_POST["id"], $_POST["textbook_name"]);
-					echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
-					echo "Responses page created!";
-					echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-					echo "</div>";
-				}
-			?>
 
 		</div>
 
@@ -110,29 +77,13 @@ function show_admin_page(){
 				$all_textbooks = get_all_textbooks();
 				if ($all_textbooks->have_posts() ) : 
 					while ( $all_textbooks->have_posts() ) : $all_textbooks->the_post();
-						echo  "<p>" .  get_the_title() . " <strong>by</strong> " . get_post_meta( get_the_ID(), '_textbook_annotator_author_meta_key', true ) ." </p>";
+						echo  "<p>" .  get_the_title() . " <strong>by</strong> " . get_post_meta( get_the_ID(), '_textbook_annotator_author_meta_key', true ) . " ";
+						echo "<a target='_blank' href='" . get_the_permalink() . "' >View Textbook</a>";
+						echo "<a style='color:red;' href='" . get_delete_post_link(get_the_ID()) . "'>Delete</a>";
+						echo "<a target='_blank' href='" . get_edit_post_link(get_the_ID()) . "'>Edit</a></p>";
 					endwhile;
 				wp_reset_postdata();
 				endif;
-					
-				// foreach($all_textbooks as $textbook){
-				// 	echo  "<p> $textbook->name <strong>by</strong> $textbook->author </p>";
-				// 	echo "<form method='post'>";
-				// 	echo "<input type='hidden' name='id' value='$textbook->id'>";
-				// 	echo "<input type='hidden' name='textbook_name' value='$textbook->name'>";
-				// 	echo "<button type='submit' name='delete_textbook' class='btn btn-danger'> Delete $textbook->name </button><br>";
-				// 	if ($textbook->form_page_url == Null){
-				// 		echo "<button type='submit' name='add_textbook_form_page' class='btn btn-primary'> Add form page for $textbook->name </button><br>";
-				// 	} else {
-				// 		echo "<a target='_blank' href='$textbook->form_page_url'>View Form Page</a>";
-				// 	}
-				// 	if ($textbook->responses_page_url == Null){
-				// 		echo "<button type='submit' name='add_textbook_responses_page' class='btn btn-primary'> Add responses page for $textbook->name </button><br>";
-				// 	} else {
-				// 		echo "<a target='_blank' href='$textbook->responses_page_url'>View Responses Page</a>";
-				// 	}
-				// 	echo "</form>";
-				// }
 			?>
 
 			<hr>
