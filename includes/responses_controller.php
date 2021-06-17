@@ -5,6 +5,11 @@
 add_filter ( 'comment_form_default_fields','textbook_add_custom_fields', 10, 1 );
 function textbook_add_custom_fields ( $fields ) {
   if ( 'textbook_annotator' == get_post_type() ) { //only add these custom fields if the post is a textbook custom post type
+
+  	// remove the website url field 
+  	if(isset($fields['url'])){
+  		unset($fields['url']);
+  	}
   	// custom field for scientist name
     $fields['scientist_name'] = '<p>
     <label for="scientist_name">Scientist Name (required)</label>
