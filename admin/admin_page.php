@@ -105,20 +105,6 @@ function show_admin_page(){
 			<h3>Responses</h3>
 			<p>Manage student responses here!</p>
 			<hr>
-			<?php 
-				$all_student_responses = get_all_student_responses();
-				foreach($all_student_responses as $response){
-					echo  "<p> $response->student_name <strong>/</strong> $response->description </p>";
-					if ($response->approved == 0){
-						echo "<form method='post'>";
-						echo "<input type='hidden' name='id' value='$response->id'>";
-						echo "<button type='submit' name='approve_student_response' class='btn btn-primary'>Approve</button>";
-						echo "</form>";
-					}
-					echo "<img width='100px' src='$response->image_url' >";
-					echo "<hr>";
-				}
-			?>
 		</div>
 
 		<div id="About" class="tabcontent">
