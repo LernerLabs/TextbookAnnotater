@@ -62,21 +62,21 @@ add_filter( 'wp_insert_post_data', 'textbook_annotator_default_comments_on' );
 
 // add custom template for textbook custom post type
 /* Filter the single_template with our custom function*/
-add_filter('single_template', 'textbook_custom_post_template');
-function textbook_custom_post_template($single) {
+// add_filter('single_template', 'textbook_custom_post_template');
+// function textbook_custom_post_template($single) {
 
-    global $post;
+//     global $post;
 
-    /* Checks for single template by post type */
-    if ( $post->post_type == 'textbook_annotator' ) {
-        if ( file_exists( TEXTBOOK_ANNOTATER__PLUGIN_DIR . 'includes/single-textbook_annotator.php' ) ) {
-            return TEXTBOOK_ANNOTATER__PLUGIN_DIR . 'includes/single-textbook_annotator.php';
-        }
-    }
+//     /* Checks for single template by post type */
+//     if ( $post->post_type == 'textbook_annotator' ) {
+//         if ( file_exists( TEXTBOOK_ANNOTATER__PLUGIN_DIR . 'includes/single-textbook_annotator.php' ) ) {
+//             return TEXTBOOK_ANNOTATER__PLUGIN_DIR . 'includes/single-textbook_annotator.php';
+//         }
+//     }
 
-    return $single;
+//     return $single;
 
-}
+// }
 
 
 
