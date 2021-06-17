@@ -13,6 +13,7 @@ function create_textbook_custom_post_type() {
                 'publicly_queryable' => true,
                 'menu_icon' => 'dashicons-book-alt',
                 'rewrite'     => array( 'slug' => 'textbooks' ),
+                'supports' => array('title','comments'),
         )
     );
 }
@@ -47,6 +48,16 @@ function textbook_annotator_save_postdata( $post_id ) {
     }
 }
 add_action( 'save_post', 'textbook_annotator_save_postdata' );
+
+// ensuring that comments are on by default for textbook custom post type 
+function textbook_annotator_default_comments_on( $data ) {
+    if( $data['post_type'] == 'textbook_annotator' ) {
+        $data['comment_status'] = 'open';
+    }
+
+    return $data;
+}
+add_filter( 'wp_insert_post_data', 'textbook_annotator_default_comments_on' );
 
 
 // add custom template for textbook custom post type
