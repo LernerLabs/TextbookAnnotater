@@ -39,20 +39,6 @@ function show_admin_page(){
 				echo "</div>";
 			}
 			?>
-
-
-			<!-- show alert for approving student response -->
-			<?php
-				if (isset($_POST['approve_student_response']) ){
-					approve_student_response($_POST["id"]);
-					echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
-					echo "student response approved!";
-					echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-					echo "</div>";
-				}
-			?>
-
-
 		</div>
 
 		<!-- tabview button -->
@@ -103,8 +89,26 @@ function show_admin_page(){
 
 		<div id="Responses" class="tabcontent">
 			<h3>Responses</h3>
+			<h5>To approve/delete student responses go to: <a href="<?php echo admin_url( 'edit-comments.php');?>">Comments</a></h5>
 			<p>Manage student responses here!</p>
 			<hr>
+			<?php 
+				$all_comments = get_all_student_responses();
+				foreach ($all_comments as $comment) {
+					$scientist_name_meta = get_comment_meta( $comment->comment_ID, 'scientist_name', true );
+					$textbook_chapter_meta = get_comment_meta( $comment->comment_ID, 'textbook_chapter', true );
+					$textbook_section_meta = get_comment_meta( $comment->comment_ID, 'textbook_section', true );
+					if($scientist_name_meta != "") {echo "<p><strong>Scientist:</strong> $scientist_name_meta</p>";}
+					if($textbook_chapter_meta != ""){echo "<p><strong>Chapter:</strong> $textbook_chapter_meta</p>";}
+					if($textbook_section_meta != ""){echo "<p><strong>Section:</strong> $textbook_section_meta</p>";}
+					echo "<p><strong>Student Name:</strong> $comment->comment_author</p>";
+					echo "<p><strong>Scientist Description:</strong> $comment->comment_content</p>";
+					$attachment_id = get_comment_meta( $comment->comment_ID, 'attachment_id', true );
+					$attachment_url = wp_get_attachment_image_url($attachment_id);
+					echo "<img src='$attachment_url' />";
+					echo "<hr>";
+				}
+			?>
 		</div>
 
 		<div id="About" class="tabcontent">

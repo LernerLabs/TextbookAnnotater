@@ -77,3 +77,9 @@ function customizing_textbook_comment_text( $comment_text, $comment, $args ) {
 	$new_comment_text .= $comment_text;
     return $new_comment_text;
 }
+
+// get an array of all comments for textbook custom post type
+function get_all_student_responses(){
+	$all_comments = get_comments(array('post_type' => 'textbook_annotator'));
+	return $all_comments;
+}
