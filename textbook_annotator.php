@@ -42,6 +42,23 @@ define( 'TEXTBOOK_ANNOTATER__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'TEXTBOOK_ANNOTATER__PLUGIN_URL', plugin_dir_url(__FILE__ ));
 
 
+// show warning to install the DCO-comment-attachment plugin as a dependency
+$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
+if ( !in_array( 'dco-comment-attachment/dco-comment-attachment.php', $active_plugins ) ) {
+	add_action( 'admin_notices', 'display_admin_notice'  );
+}
+function display_admin_notice(){
+	echo "<div style='margin-top:50px;' class='alert alert-danger alert-dismissible fade show' role='alert'>";
+	echo "Textbook Annotator plugin requires the DCO-comment-attachment plugin as a dependency to include images in student responses. Please install the DCO-comment-attachment plugin if you are planning to let students upload images of scientists.";
+	echo "<br>";
+	echo "You can install and activate this plugin here: ";
+	$DCO_CA_link = admin_url('plugin-install.php?s=DCO-comment-attachment&tab=search&type=term');
+	echo "<a href='$DCO_CA_link'>Install DCO-comment-attachment</a>";
+	echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+	echo "</div>";
+}
+
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-textbook_annotator-activator.php

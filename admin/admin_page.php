@@ -51,6 +51,20 @@ function show_admin_page(){
 		<div id="Home" class="tabcontent">
 			<h3>Home</h3>
 			<p>Plugin main settings!</p>
+			<hr>
+			<?php
+				$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
+				if ( !in_array( 'dco-comment-attachment/dco-comment-attachment.php', $active_plugins ) ) {
+					echo "<div style='margin-top:50px;' class='alert alert-danger alert-dismissible fade show' role='alert'>";
+					echo "Textbook Annotator plugin requires the DCO-comment-attachment plugin as a dependency to include images in student responses. Please install the DCO-comment-attachment plugin if you are planning to let students upload images of scientists.";
+					echo "<br>";
+					echo "You can install and activate this plugin here: ";
+					$DCO_CA_link = admin_url('plugin-install.php?s=DCO-comment-attachment&tab=search&type=term');
+					echo "<a href='$DCO_CA_link'>Install DCO-comment-attachment</a>";
+					echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+					echo "</div>";
+				}
+			?>
 		</div>
 
 		<div id="Textbooks" class="tabcontent">
