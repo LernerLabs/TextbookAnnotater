@@ -16,6 +16,7 @@ function create_textbook_custom_post_type() {
                 'supports' => array('title','comments'),
         )
     );
+    flush_rewrite_rules();
 }
 add_action('init', 'create_textbook_custom_post_type');
 
