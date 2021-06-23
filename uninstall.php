@@ -29,7 +29,9 @@
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
-$allposts= get_posts( array('post_type'=>'textbook_annotator','numberposts'=>-1) );
-foreach ($allposts as $eachpost) {
-    wp_delete_post( $eachpost->ID, true );
+if (get_option("textbook_annotator_delete_on_uninstall")){
+    $allposts= get_posts( array('post_type'=>'textbook_annotator','numberposts'=>-1) );
+    foreach ($allposts as $eachpost) {
+        wp_delete_post( $eachpost->ID, true );
+    }
 }

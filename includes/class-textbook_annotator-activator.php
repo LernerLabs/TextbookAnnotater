@@ -30,6 +30,9 @@ class Textbook_annotator_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
+        add_option("textbook_annotator_use_images", 1);
+        add_option("textbook_annotator_delete_on_uninstall", 0);
+        
 	}
 
 }

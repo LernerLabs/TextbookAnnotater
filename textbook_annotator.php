@@ -45,7 +45,9 @@ define( 'TEXTBOOK_ANNOTATER__PLUGIN_URL', plugin_dir_url(__FILE__ ));
 // show warning to install the DCO-comment-attachment plugin as a dependency
 $active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
 if ( !in_array( 'dco-comment-attachment/dco-comment-attachment.php', $active_plugins ) ) {
-	add_action( 'admin_notices', 'display_admin_notice'  );
+    if (get_option("textbook_annotator_use_images")){
+        add_action( 'admin_notices', 'display_admin_notice'  );
+    }
 }
 function display_admin_notice(){
 	echo "<div style='margin-top:50px;' class='alert alert-danger alert-dismissible fade show' role='alert'>";
@@ -54,6 +56,8 @@ function display_admin_notice(){
 	echo "You can install and activate this plugin here: ";
 	$DCO_CA_link = admin_url('plugin-install.php?s=DCO-comment-attachment&tab=search&type=term');
 	echo "<a href='$DCO_CA_link'>Install DCO-comment-attachment</a>";
+    $textbook_annotator_link = admin_url('admin.php?page=textbook_annotater_plugin');
+    echo "<br>You can also disable image upload in the <a href='$textbook_annotator_link'>settings</a> to stop getting this warning!";
 	echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
 	echo "</div>";
 }

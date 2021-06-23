@@ -39,6 +39,18 @@ function show_admin_page(){
 				echo "</div>";
 			}
 			?>
+			<!-- show alert for saving settings -->
+			<?php 
+			if(isset($_POST['submit']) && $_POST['submit'] == "save_main_settings") {
+				update_option("textbook_annotator_use_images", $_POST["use_images_field"]);
+				update_option("textbook_annotator_delete_on_uninstall", $_POST["delete_posts_uninstall"]);
+
+				echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
+				echo "Settings saved!";
+				echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+				echo "</div>";
+			}
+			?>
 		</div>
 
 		<!-- tabview button -->
@@ -55,16 +67,48 @@ function show_admin_page(){
 			<?php
 				$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
 				if ( !in_array( 'dco-comment-attachment/dco-comment-attachment.php', $active_plugins ) ) {
-					echo "<div style='margin-top:50px;' class='alert alert-danger alert-dismissible fade show' role='alert'>";
-					echo "Textbook Annotator plugin requires the DCO-comment-attachment plugin as a dependency to include images in student responses. Please install the DCO-comment-attachment plugin if you are planning to let students upload images of scientists.";
-					echo "<br>";
-					echo "You can install and activate this plugin here: ";
-					$DCO_CA_link = admin_url('plugin-install.php?s=DCO-comment-attachment&tab=search&type=term');
-					echo "<a href='$DCO_CA_link'>Install DCO-comment-attachment</a>";
-					echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-					echo "</div>";
+					if (get_option("textbook_annotator_use_images")){
+						echo "<div style='margin-top:50px;' class='alert alert-danger alert-dismissible fade show' role='alert'>";
+						echo "Textbook Annotator plugin requires the DCO-comment-attachment plugin as a dependency to include images in student responses. Please install the DCO-comment-attachment plugin if you are planning to let students upload images of scientists.";
+						echo "<br>";
+						echo "You can install and activate this plugin here: ";
+						$DCO_CA_link = admin_url('plugin-install.php?s=DCO-comment-attachment&tab=search&type=term');
+						echo "<a href='$DCO_CA_link'>Install DCO-comment-attachment</a>";
+						echo "<br>You can also disable image upload below to stop getting this warning!";
+						echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+						echo "</div>";
+					}
 				}
 			?>
+			<?php
+				$textbook_count = wp_count_posts($type="textbook_annotator");
+				echo "<p>Number of textbooks: $textbook_count->publish</p>";
+				$response_count = 0;
+				$all_textbooks= get_posts( array('post_type'=>'textbook_annotator','numberposts'=>-1) );
+				foreach ($all_textbooks as $textbook) {
+					$textbook_comment_count = get_comments_number($textbook->ID);
+					$response_count  = $response_count + $textbook_comment_count;
+				}
+				echo "<p>Number of student responses: $response_count</p>";
+			?>
+			<hr>
+			<form method="post">
+				<p>Are you letting students upload images?</p>
+				<p>Warning: Textbook annotator uses dco-comment-attachment plugin as a dependency for images uploads</p>
+				<label for="use_images_field_yes" class="form-label">Yes</label>
+				<input type="radio" class="form-control" id="use_images_field_yes" value="1" name="use_images_field" required <?php if (get_option("textbook_annotator_use_images")){echo "checked";} ?>>
+				<label for="use_images_field_no" class="form-label">No</label>
+				<input type="radio" class="form-control" id="use_images_field_no" value="0" name="use_images_field" required <?php if (!get_option("textbook_annotator_use_images")){echo "checked";} ?>>
+
+				<p>Delete all posts/comments when uninstalling the plugin?</p>
+				<p>Warning: choosing use will delete all posts/responses when you uninstall plugin</p>
+				<label for="delete_posts_uninstall_yes" class="form-label">Yes</label>
+				<input type="radio" class="form-control" id="delete_posts_uninstall_yes" value="1" name="delete_posts_uninstall" required <?php if (get_option("textbook_annotator_delete_on_uninstall")){echo "checked";} ?>>
+				<label for="delete_posts_uninstall_no" class="form-label">No</label>
+				<input type="radio" class="form-control" id="delete_posts_uninstall_no" value="0" name="delete_posts_uninstall" required <?php if (!get_option("textbook_annotator_delete_on_uninstall")){echo "checked";} ?>>
+
+				<?php submit_button($name = "save_main_settings")?>
+			</form>
 		</div>
 
 		<div id="Textbooks" class="tabcontent">
@@ -77,10 +121,10 @@ function show_admin_page(){
 				$all_textbooks = get_all_textbooks();
 				if ($all_textbooks->have_posts() ) : 
 					while ( $all_textbooks->have_posts() ) : $all_textbooks->the_post();
-						echo  "<p>" .  get_the_title() . " <strong>by</strong> " . get_post_meta( get_the_ID(), '_textbook_annotator_author_meta_key', true ) . " ";
-						echo "<a target='_blank' href='" . get_the_permalink() . "' >View Textbook</a>";
-						echo "<a style='color:red;' href='" . get_delete_post_link(get_the_ID()) . "'>Delete</a>";
-						echo "<a target='_blank' href='" . get_edit_post_link(get_the_ID()) . "'>Edit</a></p>";
+						echo  "<p>" .  get_the_title() . " <strong>by author:</strong> " . get_post_meta( get_the_ID(), '_textbook_annotator_author_meta_key', true ) . " ";
+						echo "<a class='btn btn-primary' target='_blank' href='" . get_the_permalink() . "' >View Textbook</a>";
+						echo "<a class='btn btn-danger' href='" . get_delete_post_link(get_the_ID()) . "'>Delete</a>";
+						echo "<a class='btn btn-primary' target='_blank' href='" . get_edit_post_link(get_the_ID()) . "'>Edit</a></p>";
 					endwhile;
 				wp_reset_postdata();
 				endif;
@@ -103,8 +147,8 @@ function show_admin_page(){
 
 		<div id="Responses" class="tabcontent">
 			<h3>Responses</h3>
+			<p>Student responses show up here!</p>
 			<h5>To approve/delete student responses go to: <a href="<?php echo admin_url( 'edit-comments.php');?>">Comments</a></h5>
-			<p>Manage student responses here!</p>
 			<hr>
 			<?php 
 				$all_comments = get_all_student_responses();
