@@ -73,6 +73,7 @@ function customizing_textbook_comment_text( $comment_text, $comment, $args ) {
 	    if($scientist_name_meta != "") {$new_comment_text .= "<p><strong>Scientist:</strong> $scientist_name_meta</p>";}
 	    if($textbook_chapter_meta != ""){$new_comment_text .= "<p><strong>Chapter:</strong> $textbook_chapter_meta</p>";}
 	    if($textbook_section_meta != ""){$new_comment_text .= "<p><strong>Section:</strong> $textbook_section_meta</p>";}
+        $new_comment_text .= "<p><strong>Download Slide:</strong>";
 	}
 	$new_comment_text .= $comment_text;
     return $new_comment_text;
